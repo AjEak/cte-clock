@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CTE Clock & Date Web App</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&family=Chakra+Petch:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background-color: #0d141c;
+      font-family: 'Sarabun', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+    .aspect-16-9-wrapper {
+      position: relative;
+      width: 100vw;
+      max-width: 177.78vh;
+      height: 56.25vw;
+      max-height: 100vh;
+      background-color: #ffffff;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .background-waves {
+      position: absolute;
+      right: -5%;
+      bottom: -10%;
+      width: 60%;
+      height: 60%;
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0.8;
+    }
+    .header {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 2.5% 4% 1% 4%;
+    }
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 1.5vw;
+    }
+    .logo-dept { height: 4.8vw; width: auto; object-fit: contain; }
+    .logo-kmutt { height: 4.2vw; width: auto; object-fit: contain; }
+    .header-icons {
+      display: flex;
+      align-items: center;
+      gap: 1.5vw;
+      color: #0b253a;
+    }
+    .icon-btn {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .icon-btn svg { width: 1.8vw; height: 1.8vw; fill: currentColor; }
+    .main-content {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex: 1;
+      padding: 0 4%;
+      align-items: center;
+    }
+    .left-section {
+      width: 48%;
+      display: flex;
+      flex-direction: column;
+    }
+    .dept-title {
+      color: #0b253a;
+      font-size: 2.2vw;
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 0.3vw;
+    }
+    .faculty-title {
+      color: #0b253a;
+      font-size: 1.25vw;
+      font-weight: 700;
+      line-height: 1.3;
+    }
+    .uni-title {
+      color: #0b253a;
+      font-size: 1.2vw;
+      font-weight: 700;
+      line-height: 1.3;
+      margin-bottom: 1.2vw;
+    }
+    .brand-container {
+      display: flex;
+      align-items: center;
+      gap: 1.5vw;
+      margin-top: 0.5vw;
+    }
+    .ant-mascot-img { height: 16vw; width: auto; object-fit: contain; }
+    .values-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6vw;
+    }
+    .value-item {
+      display: flex;
+      align-items: center;
+      gap: 0.8vw;
+      color: #0b253a;
+    }
+    .value-icon {
+      width: 2.2vw;
+      height: 2.2vw;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .value-icon svg { width: 100%; height: 100%; fill: #0b253a; }
+    .value-text {
+      font-size: 1.35vw;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .right-section {
+      width: 52%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .clock-display {
+      font-family: 'Chakra Petch', sans-serif;
+      font-size: 7.2vw;
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: -0.02em;
+      transition: color 0.5s ease;
+    }
+    .date-display {
+      font-size: 1.45vw;
+      font-weight: 700;
+      margin-top: 1vw;
+      text-align: center;
+      transition: color 0.5s ease;
+    }
+    .dots-indicator {
+      position: absolute;
+      right: -1vw;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 0.8vw;
+    }
+    .dot {
+      width: 0.5vw;
+      height: 0.5vw;
+      border-radius: 50%;
+      border: 1.5px solid #8c9da8;
+      background: transparent;
+    }
+    .dot.active {
+      background: #7a8b96;
+      border-color: #7a8b96;
+    }
+    .footer {
+      position: relative;
+      z-index: 2;
+      padding: 1% 4% 2% 4%;
+      text-align: right;
+    }
+    .slogan-text {
+      color: #0b253a;
+      font-size: 1.35vw;
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="aspect-16-9-wrapper">
+    <svg class="background-waves" viewBox="0 0 600 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M100 400 C 250 300, 400 380, 600 220 L 600 400 Z" fill="#f0f5f3" opacity="0.6"/>
+      <path d="M0 400 C 200 280, 350 350, 600 180" stroke="#d5e3de" stroke-width="1.5" fill="none"/>
+      <path d="M50 400 C 250 260, 400 330, 600 150" stroke="#e1ebe7" stroke-width="1" fill="none"/>
+      <path d="M150 400 C 300 290, 450 340, 600 200" stroke="#c8dcd4" stroke-width="1" fill="none"/>
+    </svg>
+
+    <header class="header">
+      <div class="header-left">
+        <img class="logo-dept" src="image\dept-logo.png" alt="Department Logo" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\' viewBox=\'0 0 100 100\'><circle cx=\'50\' cy=\'50\' r=\'45\' fill=\'none\' stroke=\'%230b253a\' stroke-width=\'4\'/><path d=\'M50 15 L20 80 L80 80 Z\' fill=\'none\' stroke=\'%230000aa\' stroke-width=\'8\'/></svg>';">
+        <img class="logo-kmutt" src="image\kmutt-65-logo.png" alt="KMUTT 65th Logo" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'200\' height=\'80\' viewBox=\'0 0 200 80\'><text x=\'10\' y=\'50\' font-family=\'sans-serif\' font-size=\'30\' font-weight=\'bold\' fill=\'%23e65100\'>KMUTT</text><line x1=\'120\' y1=\'10\' x2=\'120\' y2=\'70\' stroke=\'%23ccc\' stroke-width=\'2\'/><text x=\'135\' y=\'55\' font-family=\'sans-serif\' font-size=\'40\' font-weight=\'bold\' fill=\'%232e7d32\'>65</text></svg>';">
+      </div>
+      <div class="header-icons">
+        <div class="icon-btn"><svg viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/></svg></div>
+        <div class="icon-btn"><svg viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg></div>
+        <div class="icon-btn"><svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg></div>
+      </div>
+    </header>
+
+    <main class="main-content">
+      <div class="left-section">
+        <h1 class="dept-title">ภาควิชาครุศาสตร์โยธา</h1>
+        <h2 class="faculty-title">คณะครุศาสตร์อุตสาหกรรมและเทคโนโลยี</h2>
+        <h3 class="uni-title">มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าธนบุรี</h3>
+
+        <div class="brand-container">
+          <img class="ant-mascot-img" src="image\ant-mascot.png" alt="Ant Mascot CTE#26" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'150\' height=\'200\' viewBox=\'0 0 150 200\'><ellipse cx=\'75\' cy=\'100\' rx=\'40\' ry=\'50\' fill=\'%230b253a\'/><text x=\'45\' y=\'105\' fill=\'white\' font-size=\'14\' font-weight=\'bold\'>CTE%2326</text></svg>';">
+
+          <div class="values-list">
+            <div class="value-item">
+              <div class="value-icon"><svg viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L4.35 19.4c-.39.39-.39 1.02 0 1.41.39.39 1.02.39 1.41 0l1.9-1.9C9.22 19.58 10.57 20 12 20c4.97 0 9-4.03 9-9s-4.03-9-9-9zm0 15c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6z"/></svg></div>
+              <span class="value-text">มีความรู้ดี</span>
+            </div>
+            <div class="value-item">
+              <div class="value-icon"><svg viewBox="0 0 24 24"><path d="M15 9H9v6h6V9zm-2 4h-2v-2h2v2zm8-2V9h-2V7c0-1.1-.9-2-2-2h-2V3h-2v2h-2V3H9v2H7c-1.1 0-2 .9-2 2v2H3v2h2v2H3v2h2v2c0 1.1.9 2 2 2h2v2h2v-2h2v2h2v-2h2c1.1 0 2-.9 2-2v-2h2v-2h-2v-2h2zm-4 6H7V7h10v10z"/></svg></div>
+              <span class="value-text">ทันเทคโนโลยี</span>
+            </div>
+            <div class="value-item">
+              <div class="value-icon"><svg viewBox="0 0 24 24"><path d="M18 11c0-2.21-1.79-4-4-4s-4 1.79-4 4 1.79 4 4 4 4-1.79 4-4zm-4 2c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zM3 3v18h18V3H3zm16 16H5V5h14v14z"/></svg></div>
+              <span class="value-text">ถ่ายทอดเป็น</span>
+            </div>
+            <div class="value-item">
+              <div class="value-icon"><svg viewBox="0 0 24 24"><path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6z"/></svg></div>
+              <span class="value-text">เรียนรู้พัฒนา</span>
+            </div>
+            <div class="value-item">
+              <div class="value-icon"><svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg></div>
+              <span class="value-text">พึ่งพาได้</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="right-section">
+        <div class="clock-display" id="clock">00:00:00</div>
+        <div class="date-display" id="date">กำลังโหลด...</div>
+
+        <div class="dots-indicator">
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot active"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <p class="slogan-text">นักถ่ายทอดความรู้ทางวิศวกรรมโยธาและเทคโนโลยีการก่อสร้าง</p>
+    </footer>
+  </div>
+
+  <script>
+    // กำหนดสีประจำวันเข้มๆ อ่านง่าย เด่นบนพื้นขาว
+    const dayStyles = [
+      { color: '#b71c1c' }, // 0: อาทิตย์ (แดงเข้ม)
+      { color: '#b57c00' }, // 1: จันทร์ (ทองเข้ม/น้ำตาลทอง)
+      { color: '#c2185b' }, // 2: อังคาร (ชมพูเข้ม/บานเย็น)
+      { color: '#1b5e20' }, // 3: พุธ (เขียวเข้ม)
+      { color: '#e65100' }, // 4: พฤหัสบดี (ส้มเข้ม)
+      { color: '#0277bd' }, // 5: ศุกร์ (ฟ้าเข้ม/น้ำเงิน)
+      { color: '#4a148c' }  // 6: เสาร์ (ม่วงเข้ม)
+    ];
+
+    const thaiDays = ['วันอาทิตย์', 'วันจันทร์', 'วันอังคาร', 'วันพุธ', 'วันพฤหัสบดี', 'วันศุกร์', 'วันเสาร์'];
+    const thaiMonths = ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'];
+    
+    const engDays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    const engMonths = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+    function updateClockAndDate() {
+      const now = new Date();
+
+      // เวลา
+      const hours = String(now.getHours()).padStart(2, '0');
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      const seconds = String(now.getSeconds()).padStart(2, '0');
+      document.getElementById('clock').textContent = `${hours}:${minutes}:${seconds}`;
+
+      // วันประจำสัปดาห์
+      const dayIndex = now.getDay();
+      const dayStyle = dayStyles[dayIndex];
+
+      // เปลี่ยนสีข้อความวัน เวลา และวันที่ตามวันประจำสัปดาห์
+      const clockElem = document.getElementById('clock');
+      const dateElem = document.getElementById('date');
+      
+      clockElem.style.color = dayStyle.color;
+      dateElem.style.color = dayStyle.color;
+
+      // จัดรูปแบบวันที่
+      const thaiDayStr = thaiDays[dayIndex];
+      const dateNum = now.getDate();
+      const thaiMonthStr = thaiMonths[now.getMonth()];
+      const thaiYear = now.getFullYear() + 543;
+
+      const engDayStr = engDays[dayIndex];
+      const engMonthStr = engMonths[now.getMonth()];
+      const engYear = now.getFullYear();
+
+      const fullDateStr = `${thaiDayStr}ที่ ${dateNum} ${thaiMonthStr} พ.ศ. ${thaiYear} / ${engDayStr}, ${dateNum} ${engMonthStr} ${engYear}`;
+      dateElem.textContent = fullDateStr;
+    }
+
+    updateClockAndDate();
+    setInterval(updateClockAndDate, 1000);
+  </script>
+</body>
+</html>
